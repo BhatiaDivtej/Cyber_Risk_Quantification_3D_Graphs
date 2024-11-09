@@ -12,7 +12,6 @@ def home():
     st.success("Welcome! Please Select the Company Size from the left menu")
 
 
-
 def page_one():
     st.title("Micro Company")
 
@@ -28,9 +27,9 @@ def page_one():
 
     # Generate grid data
     grid_size = 100
-    T = np.linspace(20, 125, grid_size)
-    E = np.linspace(0, 18, grid_size)
-    M = np.linspace(0, 10, grid_size)
+    T = np.linspace(20, 125, grid_size)  # T range for micro companies
+    E = np.linspace(0, 18, grid_size)     # E range for all companies
+    M = np.linspace(0, 10, grid_size)     # M range for all companies
     T, E, M = np.meshgrid(T, E, M, indexing='ij')
 
     # Streamlit app layout
@@ -38,7 +37,13 @@ def page_one():
 
     # Dropdown and Slider for variable selection
     variable = st.selectbox("Select Variable:", ['T', 'E', 'M'])
-    value = st.slider("Select Value:", min_value=0.0, max_value=125.0, value=50.0, step=0.1)
+    
+    if variable == 'T':
+        value = st.slider("Select Temperature (T):", min_value=20.0, max_value=125.0, value=50.0, step=0.1)
+    elif variable == 'E':
+        value = st.slider("Select Energy (E):", min_value=0.0, max_value=18.0, value=9.0, step=0.1)
+    else:  # M
+        value = st.slider("Select M:", min_value=0.0, max_value=10.0, value=5.0, step=0.1)
 
     # Update based on selected variable
     def update_plot(var, val):
@@ -93,24 +98,28 @@ def page_one():
     fig = update_plot(variable, value)
     st.plotly_chart(fig)
 
+import numpy as np
+import streamlit as st
+import plotly.graph_objects as go
+
 def page_two():
     st.title("Small Company")
 
-    # Small Company
+    # Small Company Functions
     def V(T, E, M):
         V1 = -1.2994 * E + 0.3368 * T - 0.0004 * (T**2) + 2.8878 * M
         V2 = -1.2994 * E + 0.0193 * T + 2.8878 * M + 62.7695
         return np.where(T <= 421, V1, V2)
 
-
     def P(V):
         sig = 1.017 / (1 + np.exp(-0.415 * (V/3.5 - 10.703)))
         return 0.2 + 0.77 * sig
+
     # Generate grid data
     grid_size = 100
-    T = np.linspace(20, 125, grid_size)
-    E = np.linspace(0, 18, grid_size)
-    M = np.linspace(0, 10, grid_size)
+    T = np.linspace(125, 500, grid_size)  # Updated T range for small companies
+    E = np.linspace(0, 18, grid_size)      # E range for all companies
+    M = np.linspace(0, 10, grid_size)      # M range for all companies
     T, E, M = np.meshgrid(T, E, M, indexing='ij')
 
     # Streamlit app layout
@@ -118,7 +127,13 @@ def page_two():
 
     # Dropdown and Slider for variable selection
     variable = st.selectbox("Select Variable:", ['T', 'E', 'M'])
-    value = st.slider("Select Value:", min_value=0.0, max_value=125.0, value=50.0, step=0.1)
+    
+    if variable == 'T':
+        value = st.slider("Select Temperature (T):", min_value=125.0, max_value=500.0, value=250.0, step=0.1)
+    elif variable == 'E':
+        value = st.slider("Select Energy (E):", min_value=0.0, max_value=18.0, value=9.0, step=0.1)
+    else:  # M
+        value = st.slider("Select M:", min_value=0.0, max_value=10.0, value=5.0, step=0.1)
 
     # Update based on selected variable
     def update_plot(var, val):
@@ -160,7 +175,7 @@ def page_two():
                                 hoverinfo='text',
                                 text=hover_text))
 
-        fig.update_layout(title='Plot of V, T, E and M and Probability/Likelihood of Breach of a Small COMPANY <br>' + title,
+        fig.update_layout(title='Plot of V, T, E and M and Probability/Likelihood of Breach of a SMALL COMPANY <br>' + title,
                         scene=dict(
             xaxis_title='E' if var == 'T' else 'T',
             yaxis_title='M',
@@ -174,32 +189,28 @@ def page_two():
     st.plotly_chart(fig)
 
 
+import numpy as np
+import streamlit as st
+import plotly.graph_objects as go
 
 def page_three():
     st.title("Medium Company")
 
-    # Medium Company Company
+    # Medium Company Functions
     def V(T, E, M):
         V1 = -16.7507 * E + 0.701 * T - 0.0002 * (T**2) + 32.5225 * M
         V2 = -16.7507 * E + 0.31222 * T + 32.5225 * M + 67.08712
         return np.where(T <= 1752.5, V1, V2)
 
     def P(V):
-        sig = 1.017 / (1 + np.exp(-0.415 * (V/20 - 10.703)))
+        sig = 1.017 / (1 + np.exp(-0.415 * (V / 20 - 10.703)))
         return 0.2 + 0.77 * sig
 
     # Generate grid data
     grid_size = 100
-    T = np.linspace(20, 125, grid_size)
-    E = np.linspace(0, 18, grid_size)
-    M = np.linspace(0, 10, grid_size)
-    T, E, M = np.meshgrid(T, E, M, indexing='ij')
-    
-    # Generate grid data
-    grid_size = 100
-    T = np.linspace(20, 125, grid_size)
-    E = np.linspace(0, 18, grid_size)
-    M = np.linspace(0, 10, grid_size)
+    T = np.linspace(500, 2000, grid_size)  # Updated T range for medium companies
+    E = np.linspace(0, 18, grid_size)      # E range for all companies
+    M = np.linspace(0, 10, grid_size)      # M range for all companies
     T, E, M = np.meshgrid(T, E, M, indexing='ij')
 
     # Streamlit app layout
@@ -207,7 +218,13 @@ def page_three():
 
     # Dropdown and Slider for variable selection
     variable = st.selectbox("Select Variable:", ['T', 'E', 'M'])
-    value = st.slider("Select Value:", min_value=0.0, max_value=125.0, value=50.0, step=0.1)
+    
+    if variable == 'T':
+        value = st.slider("Select Temperature (T):", min_value=500.0, max_value=2000.0, value=1000.0, step=0.1)
+    elif variable == 'E':
+        value = st.slider("Select Energy (E):", min_value=0.0, max_value=18.0, value=9.0, step=0.1)
+    else:  # M
+        value = st.slider("Select M:", min_value=0.0, max_value=10.0, value=5.0, step=0.1)
 
     # Update based on selected variable
     def update_plot(var, val):
@@ -249,7 +266,7 @@ def page_three():
                                 hoverinfo='text',
                                 text=hover_text))
 
-        fig.update_layout(title='Plot of V, T, E and M and Probability/Likelihood of Breach of a Medium COMPANY <br>' + title,
+        fig.update_layout(title='Plot of V, T, E and M and Probability/Likelihood of Breach of a MEDIUM COMPANY <br>' + title,
                         scene=dict(
             xaxis_title='E' if var == 'T' else 'T',
             yaxis_title='M',
@@ -261,7 +278,6 @@ def page_three():
     # Update and display the plot
     fig = update_plot(variable, value)
     st.plotly_chart(fig)
-
 
 
 
